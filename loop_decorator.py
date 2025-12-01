@@ -18,12 +18,13 @@ def optimization_loop(accelerator:Accelerator,
                       val_loader:DataLoader=None,
                       test_loader:DataLoader=None,
                       save_function:Callable=None,
+                      start_epoch:int=1
                       #model_list:list=[]
                       ):
     def decorator(function):
         def wrapper(*args, **kwargs):
             #nonlocal model_list
-            for e in range(epochs):
+            for e in range(start_epoch,epochs+1):
                 loss_buffer=[]
                 start=time.time()
                 for b,batch in enumerate(train_loader):
@@ -40,7 +41,7 @@ def optimization_loop(accelerator:Accelerator,
                     })
                 if save_function is not None:
                     save_function()
-                if val_loader is not None and  e % val_interval==1:
+                if val_loader is not None and  e % val_interval==0:
                     with torch.no_grad():
                         val_loss_buffer=[]
                         start=time.time()
