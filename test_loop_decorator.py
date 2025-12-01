@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 from loop_decorator import optimization_loop
 
-from test_utils import *    
+from utils_test import *    
 
 class TestDecorator(unittest.TestCase):
     
