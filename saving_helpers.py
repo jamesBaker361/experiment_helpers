@@ -58,9 +58,9 @@ def save_and_load_functions(model_dict,
             pretrained_weights_path=[os.path.join(save_dir,weights_name,) for weights_name in model_dict]
             
         with open(index_path, "r") as f:
-                data = json.load(f)
-        if "training" in data and "start_epoch" in data["training"]:
-            start_epoch = data["training"]["start_epoch"] + 1
+            data = json.load(f)
+        if "train" in data and "start_epoch" in data["train"]:
+            start_epoch = data["train"]["start_epoch"]
         else:
             start_epoch = 1  # fresh training
             
