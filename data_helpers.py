@@ -4,13 +4,17 @@ from diffusers.models.autoencoders.vae import DiagonalGaussianDistribution
 from transformers import AutoTokenizer, CLIPTextModel
 from diffusers import AutoencoderKL
 from datasets import load_dataset
+from huggingface_hub import hf_hub_download
+import json
 import datasets
 import torch
 
 import numpy as np
 import torch.nn.functional as F
 
-def process_image_default(image_processor:VaeImageProcessor):
+def process_image_default():
+    config=json.loads(open(hf_hub_download("SimianLuo/LCM_Dreamshaper_v7","feature_extractor/preprocessor_config.json")).read())
+    image_processor=VaeImageProcessor.from_config(config)
     def _func(element):
         return image_processor.preprocess(element)[0]
     
