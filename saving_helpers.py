@@ -2,6 +2,8 @@ import os
 import torch
 import json
 from huggingface_hub import hf_hub_download,HfApi
+import requests
+
 
 CONFIG_NAME="config.json"
 
@@ -50,22 +52,28 @@ def save_and_load_functions(model_dict,
             print(e)
             
     def load(hf:bool):
-        if hf:
-            index_path = hf_hub_download(repo_id, CONFIG_NAME)
-            pretrained_weights_path=[api.hf_hub_download(repo_id,weights_name,force_download=True) for weights_name in model_dict]
-        else:
-            index_path = os.path.join(save_dir, CONFIG_NAME)
-            pretrained_weights_path=[os.path.join(save_dir,weights_name,) for weights_name in model_dict]
-            
-        with open(index_path, "r") as f:
-            data = json.load(f)
-        if "train" in data and "start_epoch" in data["train"]:
-            start_epoch = data["train"]["start_epoch"]
-        else:
-            start_epoch = 1  # fresh training
-            
-        for weights_path,(weights_name, model) in zip(pretrained_weights_path,model_dict.items()):
-            model.load_state_dict(torch.load(weights_path,weights_only=True))
+        start_epoch = 1  # fresh training
+        try:
+            if hf:
+                index_path = hf_hub_download(repo_id, CONFIG_NAME)
+                pretrained_weights_path=[api.hf_hub_download(repo_id,weights_name,force_download=True) for weights_name in model_dict]
+            else:
+                index_path = os.path.join(save_dir, CONFIG_NAME)
+                pretrained_weights_path=[os.path.join(save_dir,weights_name,) for weights_name in model_dict]
+                
+            with open(index_path, "r") as f:
+                data = json.load(f)
+            if "train" in data and "start_epoch" in data["train"]:
+                start_epoch = data["train"]["start_epoch"]
+                
+            for weights_path,(weights_name, model) in zip(pretrained_weights_path,model_dict.items()):
+                model.load_state_dict(torch.load(weights_path,weights_only=True))
+                
+            return start_epoch
+        except FileNotFoundError as err:
+            print("file not found",err)
+        except requests.exceptions.HTTPError as err:
+            print("http error",err)
             
         return start_epoch
             
