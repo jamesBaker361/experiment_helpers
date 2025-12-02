@@ -1,19 +1,11 @@
-import os
-from PIL import Image
 from torch.utils.data import Dataset, DataLoader,random_split
-from torchvision import transforms
-import pandas as pd
-from PIL import Image
-import torch
-import random
-import csv
-from gpu_details import *
 from diffusers.image_processor import VaeImageProcessor
 from diffusers.models.autoencoders.vae import DiagonalGaussianDistribution
 from transformers import AutoTokenizer, CLIPTextModel
 from diffusers import AutoencoderKL
 from datasets import load_dataset
 import datasets
+import torch
 
 import numpy as np
 import torch.nn.functional as F
