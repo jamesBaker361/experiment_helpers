@@ -26,7 +26,6 @@ def repo_api_init(args):
     accelerator=Accelerator(log_with="wandb",mixed_precision=args.mixed_precision,gradient_accumulation_steps=args.gradient_accumulation_steps)
     set_seed(123)
     print("accelerator device",accelerator.device)
-    device=accelerator.device
     state = PartialState()
     print(f"Rank {state.process_index} initialized successfully")
     if accelerator.is_main_process or state.num_processes==1:
