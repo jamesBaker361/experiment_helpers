@@ -92,10 +92,9 @@ class GenericDataset(Dataset):
         }
         
 def split_data(dataset:Dataset,train_frac:float,batch_size:int):
-    train_size=len(dataset) *train_frac
-    test_size=(1.-train_size)/2.
+    test_frac=(1.-train_frac)/2.
     
-    train_dataset, test_dataset,val_dataset = random_split(dataset, [train_size, test_size,test_size],)
+    train_dataset, test_dataset,val_dataset = random_split(dataset, [train_frac, test_frac,test_frac],)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
