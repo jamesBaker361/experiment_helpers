@@ -44,4 +44,4 @@ def repo_api_init(args):
 
             api=HfApi()
             api.create_repo(args.repo_id,exist_ok=True)
-    return api,accelerator
+    return api,accelerator,accelerator.device
