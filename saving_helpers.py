@@ -1,20 +1,21 @@
 import os
 import torch
 import json
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download,HfApi
 
 CONFIG_NAME="config.json"
 
 def save_and_load_functions(model_dict,
                             save_dir,
-                            api,
+                            api:HfApi,
                             repo_id:str,
-                            save_interval:int=1,
+                            #save_interval:int=1,
                             ):
     '''
     model_dict = str: model with state_dict()
     '''
     os.makedirs(save_dir,exist_ok=True)
+    api.create_repo(repo_id,exist_ok=True)
     config_dict={
         "train":{
         "start_epoch":1
@@ -35,7 +36,7 @@ def save_and_load_functions(model_dict,
             except Exception as e:
                 print(f"failed to upload {weights_name}")
                 print(e)
-        config_path=os.path.join()
+        config_path=os.path.join(save_dir, CONFIG_NAME)
         with open(config_path,"w+") as config_file:
             config_dict["train"]["start_epoch"]+=1
             json.dump(config_dict,config_file, indent=4)
@@ -54,7 +55,7 @@ def save_and_load_functions(model_dict,
             pretrained_weights_path=[api.hf_hub_download(repo_id,weights_name,force_download=True) for weights_name in model_dict]
         else:
             index_path = os.path.join(save_dir, CONFIG_NAME)
-            pretrained_weights_path=[os.path.join(repo_id,weights_name,) for weights_name in model_dict]
+            pretrained_weights_path=[os.path.join(save_dir,weights_name,) for weights_name in model_dict]
             
         with open(index_path, "r") as f:
                 data = json.load(f)
