@@ -1,10 +1,10 @@
 from torch.utils.data import Dataset, DataLoader,random_split
-from diffusers.image_processor import VaeImageProcessor
 from diffusers.models.autoencoders.vae import DiagonalGaussianDistribution
 from transformers import AutoTokenizer, CLIPTextModel
 from diffusers import AutoencoderKL
 from datasets import load_dataset
 from huggingface_hub import hf_hub_download
+from diffusers.image_processor import VaeImageProcessor
 import json
 import datasets
 import torch
@@ -13,8 +13,7 @@ import numpy as np
 import torch.nn.functional as F
 
 def process_image_default():
-    config=json.loads(open(hf_hub_download("SimianLuo/LCM_Dreamshaper_v7","feature_extractor/preprocessor_config.json")).read())
-    image_processor=VaeImageProcessor.from_config(config)
+    image_processor=VaeImageProcessor()
     def _func(element):
         return image_processor.preprocess(element)[0]
     
@@ -55,7 +54,7 @@ class GenericDataset(Dataset):
         self.length=-1
         for column_list in [simple_columns,image_columns,one_hot_columns,tensor_columns,text_columns]:
             for key in column_list:
-                if key not in self.data:
+                if key not in self.data.features:
                     if strict:
                         raise KeyError(f"{key} not in {dataset_id}")
                 else:
