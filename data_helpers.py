@@ -72,6 +72,7 @@ class GenericDataset(Dataset):
             self.data=self.data.cast_column("image",datasets.Image())
             if image_function is not None:
                 self.data=self.data.map(lambda x :{image_key: image_function(x[image_key])})
+                #print("image")
         for one_hot_key in one_hot_columns:
             n_elements=len(set(self.data[one_hot_key]))
             self.data=self.data=self.data.map(lambda x: {one_hot_key:F.one_hot(torch.tensor(x[one_hot_key]),n_elements)})

@@ -350,10 +350,6 @@ class TestDecorator(unittest.TestCase):
             self.assertTrue((new_value==trained_state_dict[key]).all())
         self.accelerator.print("\n")
             
-
-        
-        
-        
         
 if __name__=="__main__":
     unittest.main()
