@@ -15,7 +15,7 @@ import torch.nn.functional as F
 def process_image_default():
     image_processor=VaeImageProcessor()
     def _func(element):
-        return image_processor.preprocess(element)[0]
+        return torch.tensor(image_processor.preprocess(element)[0])
     
     return _func
 

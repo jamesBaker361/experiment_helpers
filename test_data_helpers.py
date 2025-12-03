@@ -36,9 +36,11 @@ class TestData(unittest.TestCase):
         
         self.assertIn("image",batch)
         self.assertIsInstance(batch["image"],torch.Tensor)
+        self.assertEqual(batch["image"].size()[0],3)
+        self.assertEqual(len(batch["image"].size()),3)
         
     def test_generic_dataset_text(self):
-        data=GenericDataset(DEFAULT_DATA,text_columns=["text"],text_function=process_clip_text)
+        data=GenericDataset(DEFAULT_DATA,text_columns=["text"],text_function=process_clip_text())
         for batch in data:
             break
         
