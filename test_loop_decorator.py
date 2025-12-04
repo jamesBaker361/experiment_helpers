@@ -32,7 +32,7 @@ class TestDecorator(unittest.TestCase):
                            train_loader=train_loader,
                            epochs=epochs,
                            val_interval=0)
-        def stub(batch,train:bool):
+        def stub(batch,train:bool,misc:dict):
             if train:
                 return 1
             else:
@@ -54,7 +54,7 @@ class TestDecorator(unittest.TestCase):
                            val_interval=val_interval,
                            val_loader=val_loader,
                            test_loader=test_loader)
-        def stub(batch,train:bool):
+        def stub(batch,train:bool,misc):
             if train:
                 return 1
             else:
@@ -84,7 +84,7 @@ class TestDecorator(unittest.TestCase):
                            val_loader=val_loader,
                            test_loader=test_loader,
                            save_function=save)
-        def stub(batch,train:bool):
+        def stub(batch,train:bool,misc_dict):
             if train:
                 return 1
             else:
@@ -130,7 +130,7 @@ class TestDecorator(unittest.TestCase):
                            save_function=save,
                            #model_list=[model]
                            )
-        def stub(batch,train:bool,
+        def stub(batch,train:bool,misc:dict
                  #model_list:list
                  ):
             #model=model_list[0]
@@ -192,7 +192,7 @@ class TestDecorator(unittest.TestCase):
                            val_loader=val_loader,
                            test_loader=test_loader,
                            save_function=save)
-        def stub(batch,train:bool):
+        def stub(batch,train:bool,misc_dict):
             images,labels=batch
             
             
@@ -256,7 +256,7 @@ class TestDecorator(unittest.TestCase):
                            val_loader=val_loader,
                            test_loader=test_loader,
                            save_function=save)
-        def stub(batch,train:bool):
+        def stub(batch,train:bool,misc_dict):
             x,y=batch
             
             predicted=model(x)
@@ -314,7 +314,7 @@ class TestDecorator(unittest.TestCase):
                            save_function=save,
                            #model_list=[model]
                            )
-        def stub(batch,train:bool,
+        def stub(batch,train:bool,misc:dict
                  #model_list:list
                  ):
             #model=model_list[0]

@@ -8,6 +8,7 @@ import torch
 import time
 import numpy as np
 from typing import Callable
+from functools import wraps
 
 
 def optimization_loop(accelerator:Accelerator,
@@ -30,7 +31,10 @@ def optimization_loop(accelerator:Accelerator,
                 for b,batch in enumerate(train_loader):
                     if b==limit:
                         break
-                    loss=function(batch,True)
+                    loss=function(batch,True,{
+                        "b":b,
+                        "epochs":e,
+                        "mode":"train"})
                     loss_buffer.append(loss)
                 end=time.time()
                 accelerator.print(f"\t epoch {e} elapsed {end-start}")
@@ -48,7 +52,10 @@ def optimization_loop(accelerator:Accelerator,
                         for b,batch in enumerate(val_loader):
                             if b==limit:
                                 break
-                            loss=function(batch,False)
+                            loss=function(batch,False,{
+                        "b":b,
+                        "epochs":e,
+                        "mode":"val"})
                             val_loss_buffer.append(loss)
                         end=time.time()
                         accelerator.print(f"\t val epoch {e} elapsed {end-start}")
@@ -64,7 +71,10 @@ def optimization_loop(accelerator:Accelerator,
                     for b,batch in enumerate(test_loader):
                         if b==limit:
                             break
-                        loss=function(batch,False)
+                        loss=function(batch,False,{
+                        "b":b,
+                        "epochs":e,
+                        "mode":"test"})
                         test_loss_buffer.append(loss)
                     end=time.time()
                     accelerator.print(f"\t test epoch elapsed {end-start}")

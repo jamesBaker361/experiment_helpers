@@ -23,6 +23,10 @@ def default_parser():
     return parser
 
 def repo_api_init(args):
+    '''
+    
+    api,accelerator,device=repo_api_init(args)
+    '''
     accelerator=Accelerator(log_with="wandb",mixed_precision=args.mixed_precision,gradient_accumulation_steps=args.gradient_accumulation_steps)
     set_seed(123)
     print("accelerator device",accelerator.device)
