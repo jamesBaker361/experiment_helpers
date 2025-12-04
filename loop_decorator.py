@@ -73,7 +73,7 @@ def optimization_loop(accelerator:Accelerator,
                             break
                         loss=function(batch,False,{
                         "b":b,
-                        "epochs":e,
+                        "e":-1,
                         "mode":"test"})
                         test_loss_buffer.append(loss)
                     end=time.time()
