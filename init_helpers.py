@@ -48,3 +48,16 @@ def repo_api_init(args):
             api=HfApi()
             api.create_repo(args.repo_id,exist_ok=True)
     return api,accelerator,accelerator.device
+
+def main_function(main,parser,print_details):
+    if __name__=='__main__':
+        print_details()
+        start=time.time()
+        args=parser.parse_args()
+        print(args)
+        main(args)
+        end=time.time()
+        seconds=end-start
+        hours=seconds/(60*60)
+        print(f"successful generating:) time elapsed: {seconds} seconds = {hours} hours")
+        print("all done!")
