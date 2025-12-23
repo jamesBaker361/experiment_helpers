@@ -66,6 +66,7 @@ def optimization_loop(accelerator:Accelerator,
                             })
             with torch.no_grad():
                 if test_loader is not None:
+                    e=epochs+1
                     test_loss_buffer=[]
                     start=time.time()
                     for b,batch in enumerate(test_loader):
