@@ -6,21 +6,36 @@ import random
 from huggingface_hub.errors import HfHubHTTPError
 import argparse
 
+DEFAULT_SAVE_DIR="weights"
+DEFAULT_REPO_ID="jlbaker361/model"
+DEFAULT_PROJECT="project"
+
 def default_parser():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mixed_precision",type=str,default="fp16")
-    parser.add_argument("--project_name",type=str,default="person")
+    parser.add_argument("--project_name",type=str,default=DEFAULT_PROJECT)
     parser.add_argument("--gradient_accumulation_steps",type=int,default=4)
-    parser.add_argument("--repo_id",type=str,default="jlbaker361/model",help="name on hf")
+    parser.add_argument("--repo_id",type=str,default=DEFAULT_REPO_ID,help="name on hf")
     parser.add_argument("--lr",type=float,default=0.0001)
     parser.add_argument("--epochs",type=int,default=100)
     parser.add_argument("--limit",type=int,default=-1)
-    parser.add_argument("--save_dir",type=str,default="weights")
+    parser.add_argument("--save_dir",type=str,default=DEFAULT_SAVE_DIR)
     parser.add_argument("--batch_size",type=int,default=4)
     parser.add_argument("--load_hf",action="store_true")
     parser.add_argument("--val_interval",type=int,default=10)
     
     return parser
+
+def parse_args(parser:argparse.ArgumentParser):
+    args=parser.parse_args()
+    if args.project_name==DEFAULT_PROJECT:
+        print("using default project name ",DEFAULT_PROJECT)
+    if args.repo_id ==DEFAULT_REPO_ID:
+        print("using default hf repo id ",DEFAULT_REPO_ID)
+    if args.save_dir==DEFAULT_SAVE_DIR:
+        print("using default save dir",DEFAULT_SAVE_DIR)
+        
+    return args
 
 def repo_api_init(args):
     '''
@@ -53,7 +68,7 @@ def main_function(main,parser,print_details):
     if __name__=='__main__':
         print_details()
         start=time.time()
-        args=parser.parse_args()
+        args=parse_args(parser)
         print(args)
         main(args)
         end=time.time()
