@@ -10,19 +10,27 @@ DEFAULT_SAVE_DIR="weights"
 DEFAULT_REPO_ID="jlbaker361/model"
 DEFAULT_PROJECT="project"
 
-def default_parser():
+def default_parser(different_args:dict=None):
     parser=argparse.ArgumentParser()
-    parser.add_argument("--mixed_precision",type=str,default="fp16")
-    parser.add_argument("--project_name",type=str,default=DEFAULT_PROJECT)
-    parser.add_argument("--gradient_accumulation_steps",type=int,default=4)
-    parser.add_argument("--repo_id",type=str,default=DEFAULT_REPO_ID,help="name on hf")
-    parser.add_argument("--lr",type=float,default=0.0001)
-    parser.add_argument("--epochs",type=int,default=100)
-    parser.add_argument("--limit",type=int,default=-1)
-    parser.add_argument("--save_dir",type=str,default=DEFAULT_SAVE_DIR)
-    parser.add_argument("--batch_size",type=int,default=4)
+    default={
+        "mixed_precision":"fp16",
+        "project_name":DEFAULT_PROJECT,
+        "gradient_accumulation_steps":4,
+        "repo_id":DEFAULT_REPO_ID,
+        "lr":0.0001,
+        "epochs":100,
+        "limit":-1,
+        "save_dir":DEFAULT_SAVE_DIR,
+        "batch_size":4,
+        "val_interval":4
+    }
+    for k,v in different_args.items():
+        default[k]=v
+    for key,value in default.items():
+        parser.add_argument(f"--{key}",type=type(value),default=value)
+    
+    
     parser.add_argument("--load_hf",action="store_true")
-    parser.add_argument("--val_interval",type=int,default=10)
     
     return parser
 
