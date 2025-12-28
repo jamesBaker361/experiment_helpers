@@ -24,8 +24,9 @@ def default_parser(different_args:dict=None):
         "batch_size":4,
         "val_interval":4
     }
-    for k,v in different_args.items():
-        default[k]=v
+    if different_args is not None:
+        for k,v in different_args.items():
+            default[k]=v
     for key,value in default.items():
         parser.add_argument(f"--{key}",type=type(value),default=value)
     
