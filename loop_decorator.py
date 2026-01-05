@@ -44,7 +44,11 @@ def optimization_loop(accelerator:Accelerator,
                         "loss_std":np.std(loss_buffer),
                     })
                 if save_function is not None:
-                    save_function()
+                    if getattr(args,"save_interval",None) is not None:
+                        if e%args.save_interval==0:
+                            save_function()
+                    else:
+                        save_function()
                 if val_loader is not None and  e % val_interval==0:
                     with torch.no_grad():
                         val_loss_buffer=[]
