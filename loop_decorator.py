@@ -38,6 +38,9 @@ def optimization_loop(accelerator:Accelerator,
                     loss_buffer.append(loss)
                 end=time.time()
                 accelerator.print(f"\t epoch {e} elapsed {end-start}")
+                accelerator.print({ "loss_mean":np.mean(loss_buffer),
+                        "loss_std":np.std(loss_buffer),
+                    })
 
                 accelerator.log({
                         "loss_mean":np.mean(loss_buffer),
@@ -68,6 +71,10 @@ def optimization_loop(accelerator:Accelerator,
                                 "val_loss_mean":np.mean(val_loss_buffer),
                                 "val_loss_std":np.std(val_loss_buffer),
                             })
+                        accelerator.print({
+                                "val_loss_mean":np.mean(val_loss_buffer),
+                                "val_loss_std":np.std(val_loss_buffer),
+                            })
             with torch.no_grad():
                 if test_loader is not None:
                     e=epochs+1
@@ -85,6 +92,10 @@ def optimization_loop(accelerator:Accelerator,
                     accelerator.print(f"\t test epoch elapsed {end-start}")
 
                     accelerator.log({
+                            "test_loss_mean":np.mean(test_loss_buffer),
+                            "test_loss_std":np.std(test_loss_buffer),
+                        })
+                    accelerator.print({
                             "test_loss_mean":np.mean(test_loss_buffer),
                             "test_loss_std":np.std(test_loss_buffer),
                         })
