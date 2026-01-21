@@ -15,7 +15,9 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import torch
+import json
 import torch.nn as nn
+import os
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.loaders import PeftAdapterMixin, UNet2DConditionLoadersMixin
@@ -53,7 +55,8 @@ from diffusers.models.unets.unet_2d_condition import UNet2DConditionModel, UNet2
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
-
+WEIGHTS_PATH="model_weights.pth"
+JSON_PATH="config.json"
 
 
 
@@ -503,6 +506,8 @@ class MetadataUNet2DConditionModel(
         metadata_proj_dim:int,):
         self.use_metadata = use_metadata
         self.metadata_proj=metadata_proj
+        self.num_metadata=num_metadata
+        self.metadata_proj_dim=metadata_proj_dim
         if use_metadata:
             if metadata_proj:
                 self.metadata_embedding = nn.ModuleList([
@@ -516,6 +521,31 @@ class MetadataUNet2DConditionModel(
             self.num_metadata = num_metadata
         else:
             self.metadata_embedding = None
+        
+    def save_metadata_embedding(self,save_dir):
+        os.makedirs(save_dir,exist_ok=True)
+        config={
+            "use_metadata":self.use_metadata,
+            "metadata_proj":self.metadata_proj,
+            "num_metadata":self.num_metadata,
+            "metadata_proj_dim":self.metadata_proj_dim
+        }
+        state_dict=self.metadata_embedding.state_dict()
+        torch.save(state_dict,os.path.join(save_dir,WEIGHTS_PATH))
+        with open(os.path.join(save_dir,JSON_PATH),"w") as file:
+            json.dump(config,file)
+       
+    def load_metadata_embedding(self,save_dir):
+        with open(os.path.join(save_dir,JSON_PATH)) as file:    
+            config=json.load(file)
+        state_dict=torch.load(os.path.join(save_dir,WEIGHTS_PATH))
+        self.init_metadata(
+            **config
+        )
+        self.metadata_embedding.load_state_dict(state_dict)
+        
+        
+        
         
 
     def forward(
