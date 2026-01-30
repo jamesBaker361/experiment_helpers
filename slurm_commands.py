@@ -1,6 +1,6 @@
 import os
 
-for file in os.listdir(os.getcwd()):
+for file in sorted(os.listdir(os.getcwd())):
     if file.endswith(".py"):
         print(file)
         for partition in ["cpu","gpu"]:
