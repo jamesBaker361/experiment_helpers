@@ -55,8 +55,8 @@ from diffusers.models.unets.unet_2d_condition import UNet2DConditionModel, UNet2
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
-WEIGHTS_PATH="model_weights.pth"
-JSON_PATH="config.json"
+WEIGHTS_PATH="metadata_model_weights.pth"
+JSON_PATH="metaata_config.json"
 
 class MetadataMixin:
     def init_metadata(self,
