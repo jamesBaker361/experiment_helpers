@@ -5,7 +5,7 @@ import subprocess
 pattern = r"^run.*\.py$"
 
 for file in os.listdir(os.getcwd()):
-    if re.match(pattern,file):
+    if file.startswith("run") and file.endswith(".py"):
         base = os.path.splitext(file)[0]  # removes .py
         command = [
             "sbatch",
