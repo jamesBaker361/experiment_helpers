@@ -13,7 +13,7 @@ for file in os.listdir(os.getcwd()):
             "--err=slurm_chip/runtest/{}.err".format(base),
             "--out=slurm_chip/runtest/{}.out".format(base),
             file,
-            "dummy.py"
+            "experiment_helpers/dummy.py"
         ]
         
         print(command)
