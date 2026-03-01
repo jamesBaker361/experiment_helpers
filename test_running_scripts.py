@@ -16,4 +16,6 @@ for file in os.listdir(os.getcwd()):
             "dummy.py"
         ]
         
+        print(command)
+        
         subprocess.run(command)
