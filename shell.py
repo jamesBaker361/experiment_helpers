@@ -139,17 +139,17 @@ class SFTPShell(cmd.Cmd):
                     self.sftp.get(f, f)
                     print(f"Downloaded {f}")
         else:
-            # No wildcard
-            if recursive:
-                local_dir = os.path.basename(path.rstrip("/"))
-                os.makedirs(local_dir,exist_ok=True)
-                self._get_recursive(path, local_dir)
-            else:
-                try:
-                    self.sftp.get(path, os.path.basename(path))
-                    print(f"Downloaded {path}")
-                except FileNotFoundError:
-                    print(f" {path} does not exist")
+            try:
+                # No wildcard
+                if recursive:
+                    local_dir = os.path.basename(path.rstrip("/"))
+                    os.makedirs(local_dir,exist_ok=True)
+                    self._get_recursive(path, local_dir)
+                else:
+                        self.sftp.get(path, os.path.basename(path))
+                        print(f"Downloaded {path}")
+            except FileNotFoundError:
+                print(f" {path} does not exist")
 
     def _get_recursive(self, remote_path, local_path):
         os.makedirs(local_path, exist_ok=True)
