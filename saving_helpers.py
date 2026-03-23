@@ -25,7 +25,7 @@ def save_and_load_functions(model_dict,
     }
     
     
-    def save():
+    def save(epoch:int):
         for weights_name, model in model_dict.items():
             save_path=os.path.join(save_dir,weights_name)
             state_dict=model.state_dict()
@@ -40,7 +40,7 @@ def save_and_load_functions(model_dict,
                 print(e)
         config_path=os.path.join(save_dir, CONFIG_NAME)
         with open(config_path,"w+") as config_file:
-            config_dict["train"]["start_epoch"]+=1
+            config_dict["train"]["start_epoch"]=epoch
             json.dump(config_dict,config_file, indent=4)
             pad = " " * 2048  # ~1KB of padding
             config_file.write(pad)
@@ -51,7 +51,7 @@ def save_and_load_functions(model_dict,
             print(f"failed to upload {CONFIG_NAME}")
             print(e)
             
-    def load(hf:bool):
+    def load(hf:bool=False):
         start_epoch = 1  # fresh training
         try:
             if hf:
