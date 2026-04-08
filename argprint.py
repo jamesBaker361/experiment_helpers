@@ -1,6 +1,4 @@
 from argparse import ArgumentParser,Namespace,Action
-from init_helpers import default_parser
-import sys
 
 def get_type(action: Action) -> str:
     if action.type is not None:
