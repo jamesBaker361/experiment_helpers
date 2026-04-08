@@ -21,3 +21,24 @@ def print_details():
         print(f"GPU Memory Used: {torch.cuda.memory_reserved(current_device) / 1024**2} MB")
     except:
         print("couldnt print cuda details")
+    print("Torch:", torch.__version__)
+    print("CUDA version:", torch.version.cuda)
+    print("CUDA available:", torch.cuda.is_available())
+    
+    x = torch.randn(1, 3, 32, 32)
+    conv = torch.nn.Conv2d(3, 4, 3)
+
+    try:
+        y = conv(x)
+        print("Conv2d works on CPU")
+    except Exception as e:
+        print("CPU conv failed:", e)
+
+    if torch.cuda.is_available():
+        conv = conv.cuda()
+        x = x.cuda()
+        try:
+            y = conv(x)
+            print("Conv2d works on CUDA")
+        except Exception as e:
+            print("CUDA conv failed:", e)
