@@ -13,6 +13,9 @@ import tty
 import termios
 import argparse
 
+
+
+
 def input_password(prompt="Password: "):
     """Prompt for a password and display asterisks (*) as the user types"""
     print(prompt, end='', flush=True)
