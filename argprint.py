@@ -13,3 +13,4 @@ def get_type(action: Action) -> str:
 def print_args(parser:ArgumentParser):
     for action in parser._actions:
         print(f"{action.dest} {get_type(action)} = args.{action.dest}")
+        
