@@ -1,4 +1,4 @@
-from datasets import get_dataset_config_names,load_dataset,Dataset
+from datasets import get_dataset_config_names,load_dataset,Dataset,Features,Image,Value
 import re
 
 #make dreambooth dataset (in case you deleted it)
@@ -17,4 +17,9 @@ for config in config_list:
         data_dict["image"].append(row["image"])
         data_dict["object"].append(re.sub(r"\d+", "", config).replace("_"," "))
 
-Dataset.from_dict(data_dict).push_to_hub("jlbaker361/dreambooth")
+features=Features({
+    "image":Image(),
+    "object":Value("string")
+})
+
+Dataset.from_dict(data_dict,features=features).push_to_hub("jlbaker361/dreambooth")

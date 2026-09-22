@@ -1,4 +1,4 @@
-from datasets import Dataset
+from datasets import Dataset, Features, Value, Image as HFImage
 import requests
 from PIL import Image
 from io import BytesIO
@@ -47,4 +47,12 @@ for n in range(20):
             data_dict["name"].append(name)
             data_dict["type_line"].append(type_line)
 
-Dataset.from_dict(data_dict).push_to_hub("jlbaker361/mtg")
+features=Features({
+    "image":HFImage(),
+    "image_url":Value("string"),
+    "artist":Value("string"),
+    "name":Value("string"),
+    "type_line":Value("string")
+})
+
+Dataset.from_dict(data_dict,features=features).push_to_hub("jlbaker361/mtg")

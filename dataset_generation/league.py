@@ -1,10 +1,17 @@
 import requests
 from diffusers.utils.loading_utils import load_image
-from datasets import Dataset,load_dataset
+from datasets import Dataset,load_dataset,Features,Image,Value
 import time
 import PIL
 
 #makes league in case you deleted it already
+
+features=Features({
+    "image":Image(),
+    "url":Value("string"),
+    "tag":Value("string"),
+    "champion":Value("string")
+})
 
 start=time.time()
 url = "https://ddragon.leagueoflegends.com/cdn/15.16.1/data/en_US/champion.json"
@@ -21,12 +28,12 @@ if response.status_code == 200:
         "tag":[],
         "champion":[]
     }
-    start=0
+    skip=0
     try:
         old_dataset=load_dataset("jlbaker361/league-splash-tagged",split="train")
         output_dict=old_dataset.to_dict()
-        start=len(output_dict["image"])
-        print(f"skipping {start}")
+        skip=len(output_dict["image"])
+        print(f"skipping {skip}")
     except:
         print("colu,ndt load from hf")
     data = response.json()
@@ -37,7 +44,7 @@ if response.status_code == 200:
 
         champion_id=data["data"][name]["id"]
         if n % 5==0:
-            Dataset.from_dict(output_dict).push_to_hub("jlbaker361/league-splash-tagged")
+            Dataset.from_dict(output_dict,features=features).push_to_hub("jlbaker361/league-splash-tagged")
             time.sleep(10)
         url_champion=f"https://ddragon.leagueoflegends.com/cdn/15.16.1/data/en_US/champion/{champion_id}.json"
         #print(url_champion)
@@ -46,7 +53,8 @@ if response.status_code == 200:
             data_champion=response_champion.json()
             skin_list=data_champion["data"][champion_id]["skins"]
             for skin in skin_list:
-                if count < start:
+                if count < skip:
+                    count+=1
                     continue
                 skin_num=skin["num"]
                 url_skin=f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champion_id}_{skin_num}.jpg"
@@ -68,7 +76,7 @@ if response.status_code == 200:
                     print("bad url!", url_skin)
                     failures+=1
                 count+=1 
-    Dataset.from_dict(output_dict).push_to_hub("jlbaker361/league-splash-tagged")
+    Dataset.from_dict(output_dict,features=features).push_to_hub("jlbaker361/league-splash-tagged")
     end=time.time()
     print(f"all done! failures: {failures} successes: {successes} elpased {end-start}")
 else:
